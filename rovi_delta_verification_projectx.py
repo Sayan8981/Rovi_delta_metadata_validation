@@ -153,7 +153,7 @@ class rovi_delta_verification_lib:
 
     def long_title_validation(self,rovi_long_title,px_long_title):
         self.default_params()
-        if rovi_long_title == px_long_title:
+        if lower(rovi_long_title) == lower(px_long_title):
             self.long_title_match = "True"
         else:
             self.long_title_match = "False"
@@ -161,7 +161,7 @@ class rovi_delta_verification_lib:
 
     def medium_title_validation(self,rovi_medium_title,px_medium_title):
         self.default_params()
-        if rovi_medium_title == px_medium_title:
+        if lower(rovi_medium_title) == lower(px_medium_title):
             self.medium_title_match = "True"
         else:
             self.medium_title_match = "False"
@@ -169,7 +169,7 @@ class rovi_delta_verification_lib:
 
     def original_title_validation(self,rovi_original_title,px_original_title):
         self.default_params()
-        if rovi_original_title == px_original_title:
+        if lower(rovi_original_title) == lower(px_original_title):
             self.original_title_match = "True"
         else:
             self.original_title_match = "False"
@@ -177,7 +177,7 @@ class rovi_delta_verification_lib:
 
     def original_episode_title_validation(self,rovi_original_episode_title,px_original_episode_title):
         self.default_params()
-        if rovi_original_episode_title == px_original_episode_title:
+        if lower(rovi_original_episode_title) == lower(px_original_episode_title):
             self.original_episode_title_match = "True"
         else:
             self.original_episode_title_match = "False"
@@ -186,7 +186,7 @@ class rovi_delta_verification_lib:
     def episode_title_validation(self,rovi_episode_title,px_episode_title):
         #import pdb;pdb.set_trace()
         self.default_params()
-        if rovi_episode_title == px_episode_title:
+        if lower(rovi_episode_title) == lower(px_episode_title):
             self.episode_title_match = "True"
         else:
             self.episode_title_match = "False"
@@ -194,7 +194,7 @@ class rovi_delta_verification_lib:
 
     def category_validation(self,rovi_category,px_category):
         self.default_params()
-        if rovi_category == px_category:
+        if lower(rovi_category) == lower(px_category):
             self.category_match = "True"
         else:
             self.category_match = "False"
@@ -202,7 +202,7 @@ class rovi_delta_verification_lib:
 
     def sport_subtitle_validation(self,rovi_sport_subtitle,px_sports_subtitle):
         self.default_params()
-        if rovi_sport_subtitle == px_sports_subtitle:
+        if lower(rovi_sport_subtitle) == lower(px_sports_subtitle):
             self.sport_subtitle_match = "True"
         else:
             self.sport_subtitle_match = "False"
@@ -228,7 +228,7 @@ class rovi_delta_verification_lib:
 
     def audio_level_validation(self,rovi_audio_lavel,px_audio_level):
         self.default_params()
-        if rovi_audio_lavel == px_audio_level:
+        if lower(rovi_audio_lavel) == lower(px_audio_level):
             self.audio_level_match = "True"
         else:
             self.audio_level_match = "False"
@@ -236,7 +236,7 @@ class rovi_delta_verification_lib:
 
     def movie_type_validation(self,rovi_movie_type,px_movie_type):
         self.default_params()
-        if rovi_movie_type == px_movie_type:
+        if lower(rovi_movie_type) == lower(px_movie_type):
             self.movie_type_match = "True"
         else:
             self.movie_type_match = "False"
@@ -244,13 +244,12 @@ class rovi_delta_verification_lib:
 
     def program_color_type_validation(self,rovi_program_color_type,px_program_color_type):
         self.default_params()
-        if rovi_program_color_type == px_program_color_type:
+        if lower(rovi_program_color_type) == lower(px_program_color_type):
             self.program_color_type_match = "True"
         else:
             self.program_color_type_match = "False"
         return self.program_color_type_match   
                 
-
 class rovi_delta_verification:
 
     total = 0
@@ -340,11 +339,11 @@ class rovi_delta_verification:
 
     # TODO: multi process Operations 
     def thread_pool(self): 
-        t1=threading.Thread(target=self.main,args=(1,"thread-1",2000))
+        t1=Process(target=self.main,args=(1,"thread-1",2000))
         t1.start()
-        t2=threading.Thread(target=self.main,args=(2000,"thread-2",4000))
+        t2=Process(target=self.main,args=(2000,"thread-2",4000))
         t2.start()
-        t3=threading.Thread(target=self.main,args=(4000,"thread-3",5666))
+        t3=Process(target=self.main,args=(4000,"thread-3",5665))
         t3.start() 
 
 if __name__=="__main__":
