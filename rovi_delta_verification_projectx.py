@@ -111,7 +111,7 @@ class rovi_delta_verification_lib:
                         self.px_medium_title = unidecode.unidecode(pinyin.get(data.get("medium_title")))    
                     if data.get("original_episode_title") != "":
                         self.px_original_episode_title = unidecode.unidecode(pinyin.get(data.get("original_episode_title")))
-                    elif data.get("episode_title") != "":
+                    if data.get("episode_title") != "":
                         self.px_episode_title = unidecode.unidecode(pinyin.get(data.get("episode_title")))
                     self.is_group_language_primary = data.get("is_group_language_primary")
                     self.px_record_language = data.get("record_language")
@@ -184,6 +184,7 @@ class rovi_delta_verification_lib:
         return self.original_episode_title_match 
 
     def episode_title_validation(self,rovi_episode_title,px_episode_title):
+        #import pdb;pdb.set_trace()
         self.default_params()
         if rovi_episode_title == px_episode_title:
             self.episode_title_match = "True"
@@ -308,7 +309,7 @@ class rovi_delta_verification:
                 self.get_data_from_sheet(input_data,_id)
                 self.total += 1
                 self.logger.debug ("\n")
-                self.logger.debug ({"Total tested ": self.total})
+                self.logger.debug ({"Total tested ": self.total,"thread_name":thread_name})
                 projectx_id = rovi_delta_verification_lib().check_mapping_px_id(self.source_mapping_api%(self.projectx_mapping_domain_beta,self.rovi_id,self.source,self.show_type),self.token)
                 if projectx_id != "NA":
                     mapping_response = rovi_delta_verification_lib().get_mappings_sources(projectx_id,self.projectx_mapping_api%(self.projectx_mapping_domain_beta,str(projectx_id)),self.token)
@@ -339,8 +340,12 @@ class rovi_delta_verification:
 
     # TODO: multi process Operations 
     def thread_pool(self): 
-        t1=threading.Thread(target=self.main,args=(1,"thread-1",5666))
-        t1.start() 
+        t1=threading.Thread(target=self.main,args=(1,"thread-1",2000))
+        t1.start()
+        t2=threading.Thread(target=self.main,args=(2000,"thread-2",4000))
+        t2.start()
+        t3=threading.Thread(target=self.main,args=(4000,"thread-3",5666))
+        t3.start() 
 
 if __name__=="__main__":
     rovi_delta_verification().thread_pool()   
