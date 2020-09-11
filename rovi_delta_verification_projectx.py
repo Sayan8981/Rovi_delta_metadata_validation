@@ -291,11 +291,12 @@ class rovi_delta_verification:
         self.rovi_movie_type = str(input_data[id_][32])
         self.rovi_program_color_type = str(input_data[id_][33])
         self.rovi_iso3_char_language = str(input_data[id_][40])
+        self.logger.debug ("\n")
         self.logger.debug({"show_type":self.show_type,"Rovi_id":self.rovi_id,"rovi_series_id":self.rovi_series_id})
 
     def main(self,start_id,thread_name,end_id):
         self.get_env_url()
-        input_file = "/input/PX_3.0_Rovi_delta_verification - Sheet1"
+        input_file = "/input/PX_3.0_Rovi_delta_verification_Beta - Main_09092020"
         input_data = lib_common_modules().read_csv(input_file)
         self.logger=lib_common_modules().create_log(os.getcwd()+"/logs/log.txt")
         result_sheet = '/output/Rovi_delta_verification_%s_%s.csv'%(thread_name,datetime.date.today())
@@ -306,11 +307,15 @@ class rovi_delta_verification:
             for _id in range(start_id,end_id):
                 self.get_data_from_sheet(input_data,_id)
                 self.total += 1
+                self.logger.debug ("\n")
+                self.logger.debug ({"Total tested ": self.total})
                 projectx_id = rovi_delta_verification_lib().check_mapping_px_id(self.source_mapping_api%(self.projectx_mapping_domain_beta,self.rovi_id,self.source,self.show_type),self.token)
                 if projectx_id != "NA":
                     mapping_response = rovi_delta_verification_lib().get_mappings_sources(projectx_id,self.projectx_mapping_api%(self.projectx_mapping_domain_beta,str(projectx_id)),self.token)
                     projectx_details = rovi_delta_verification_lib().getting_projectx_details(projectx_id,self.show_type,self.source,self.projectx_programs_api%(self.projectx_domain,projectx_id),self.token)
                     if projectx_details != "Null":
+                        self.logger.debug ("\n")
+                        self.logger.debug ({"Projectx_details":projectx_details,"Projectx_id":projectx_id})
                         long_title_validation_result = rovi_delta_verification_lib().long_title_validation(self.rovi_long_title,projectx_details["px_long_title"])
                         medium_title_validation_result = rovi_delta_verification_lib().medium_title_validation(self.rovi_medium_title,projectx_details["px_medium_title"])
                         original_title_validation_result = rovi_delta_verification_lib().original_title_validation(self.rovi_original_title,projectx_details["px_original_title"])
@@ -323,7 +328,7 @@ class rovi_delta_verification:
                         audio_label_validation_result = rovi_delta_verification_lib().audio_level_validation(self.rovi_audio_lavel,projectx_details["px_audio_level"])
                         movie_type_validation_result = rovi_delta_verification_lib().movie_type_validation(self.rovi_movie_type,projectx_details["px_movie_type"])
                         program_color_type_validation_result = rovi_delta_verification_lib().program_color_type_validation(self.rovi_program_color_type,projectx_details["px_program_color_type"])
-
+                        
                         self.writer.writerow([self.show_type,self.rovi_id,self.rovi_series_id,self.rovi_season_program_id,self.rovi_varient_parent_id,self.rovi_title_parent_id,self.rovi_is_group_primary_language,self.rovi_aliases,self.rovi_record_language,self.rovi_audio_lavel,self.rovi_movie_type,self.rovi_program_color_type,self.rovi_iso3_char_language,projectx_id,long_title_validation_result,medium_title_validation_result,original_title_validation_result,original_episode_title_validation_result,episode_title_validation_result,category_validation_result,sport_subtitle_validation_result,run_time_validation_result,release_year_validation_result,audio_label_validation_result,movie_type_validation_result,program_color_type_validation_result,projectx_details["px_aliases"],projectx_details["px_season_number"],projectx_details["px_episode_number"],projectx_details["is_group_language_primary"],projectx_details["record_language"],projectx_details["iso_3_char_language"],projectx_details["px_series_id"],projectx_details["px_season_program_id"],projectx_details["px_variant_parent_id"],projectx_details["px_title_parent_id"]])
                     else:
                         self.writer.writerow([self.show_type,self.rovi_id,self.rovi_series_id,self.rovi_season_program_id,self.rovi_varient_parent_id,self.rovi_title_parent_id,self.rovi_is_group_primary_language,self.rovi_aliases,self.rovi_record_language,self.rovi_audio_lavel,self.rovi_movie_type,self.rovi_program_color_type,self.rovi_iso3_char_language,projectx_id,projectx_details])
@@ -334,7 +339,7 @@ class rovi_delta_verification:
 
     # TODO: multi process Operations 
     def thread_pool(self): 
-        t1=threading.Thread(target=self.main,args=(1,"thread-1",21))
+        t1=threading.Thread(target=self.main,args=(1,"thread-1",5666))
         t1.start() 
 
 if __name__=="__main__":
